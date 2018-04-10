@@ -1,0 +1,15 @@
+/.bundle/
+/.idea/
+/.yardoc
+/_yardoc/
+/coverage/
+/bin/
+/doc/
+/exe/
+/pkg/
+/spec/reports/
+/tmp/
+Gemfile.lock
+.travis.yml
+/test/
+/Rakefile
