@@ -58,7 +58,7 @@ class BuildVu
 
       break if response['state'] == 'processed'
 
-      raise('Error checking conversion status') if response['state'] == 'error'
+      raise('Server error getting conversion status, see server logs for details') if response['state'] == 'error'
 
       raise('Failed: File took longer than ' + @convert_timeout.to_s + ' seconds to convert') if i == @convert_timeout
     end
@@ -86,9 +86,10 @@ class BuildVu
       raise('Error uploading file:\n' + e.message)
     end
 
-    r.code == 200 ? uuid = JSON.parse(r.body)['uuid'] : raise('Error uploading file')
+    r.code == 200 ? uuid = JSON.parse(r.body)['uuid'] : raise('Error uploading file:\n Server returned response\n' +
+                                                                  r.code)
 
-    uuid
+    uuid.nil? ? raise('Error uploading file:\nServer returned null UUID') : uuid
   end
 
   # Check conversion status
@@ -99,7 +100,8 @@ class BuildVu
       raise('Error checking conversion status:\n' + e.to_s)
     end
 
-    r.code == 200 ? response = JSON.parse(r.body) : raise('Error checking conversion status')
+    r.code == 200 ? response = JSON.parse(r.body) : raise('Error checking conversion status:\n Server returned ' +
+                                                              'response\n' + r.code)
 
     response
   end
