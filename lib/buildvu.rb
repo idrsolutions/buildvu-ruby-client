@@ -19,7 +19,7 @@
 # Copyright:: IDRsolutions
 # License:: Apache 2.0
 
-require 'JSON'
+require 'json'
 require 'rest-client'
 
 # Used to interact with IDRsolutions' BuildVu web service
