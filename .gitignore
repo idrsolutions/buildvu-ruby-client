@@ -13,3 +13,4 @@ Gemfile.lock
 .travis.yml
 /test/
 /Rakefile
+.gem
