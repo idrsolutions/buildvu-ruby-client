@@ -10,7 +10,9 @@ Gem::Specification.new do |spec|
   spec.date          = Time.now.strftime('%Y-%m-%d')
 
   spec.summary       = 'Ruby API for IDRSolutions BuildVu Microservice'
-  spec.description   = 'Ruby API for IDRSolutions BuildVu Microservice Example'
+  spec.description   = "The BuildVu Ruby Client is the Ruby API for IDRsolutions' BuildVu Microservice Example, an open
+                        source project that allows you to convert PDF to HTML5 by running BuildVu as an online service.
+                        For documentation and usage examples, check out our GitHub page."
   spec.homepage      = 'https://github.com/idrsolutions/buildvu-ruby-client'
   spec.license       = 'Apache-2.0'
 
