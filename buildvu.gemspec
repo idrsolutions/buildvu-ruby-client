@@ -25,7 +25,6 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1.16', '>= 1.16.1'
   spec.add_runtime_dependency 'rest-client', '~> 2.0', '>= 2.0.2'
   spec.add_runtime_dependency 'json', '~> 2.1', '>= 2.1'
 end
