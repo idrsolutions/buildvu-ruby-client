@@ -14,10 +14,10 @@ Run the following command to install
 
     $ gem install buildvu
 
-Alternatively, add this line to your application's .gemspec file...
+Alternatively, add this line to your application's Gemfile...
 
 ```ruby
-spec.add_runtime_dependency "buildvu"
+gem 'buildvu'
 ```
 
 ...and then execute:
