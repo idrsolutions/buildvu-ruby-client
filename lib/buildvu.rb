@@ -65,13 +65,13 @@ class BuildVu
 
     # download output
     unless output_file_path.nil?
-      download_url = response['downloadPath']
+      download_url = response['downloadUrl']
       # get filename from input_file_path (downloaded file will be [filename].zip)
       output_file_path += '/' + File.basename(input_file_path)[0..-4] + 'zip'
       download(download_url, output_file_path)
     end
 
-    response['previewPath']
+    response['previewUrl']
   end
 
   private
