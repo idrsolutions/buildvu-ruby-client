@@ -2,7 +2,7 @@
 
 BuildVu Ruby Client is the Ruby API for IDRSolution's [BuildVu Microservice Example](https://github.com/idrsolutions/buildvu-microservice-example).
 
-It functions as an easy to use, plug and play library that lets you use [BuildVu](https://www.idrsolutions.com/buildvu/) from Ruby. 
+It functions as an easy to use, plug and play library that lets you use [BuildVu](https://www.idrsolutions.com/buildvu/) from Ruby.
 
 -----
 
@@ -10,7 +10,7 @@ It functions as an easy to use, plug and play library that lets you use [BuildVu
 
 ## Using RubyGems: ##
 
-Run the following command to install 
+Run the following command to install
 
     $ gem install buildvu
 
@@ -23,7 +23,7 @@ gem 'buildvu'
 ...and then execute:
 
     $ bundle install
-    
+
 ## Building the gem manually: ##
 
 Run the following command to build the gem locally:
@@ -49,7 +49,8 @@ buildvu = BuildVu.new('localhost:8080/microservice-example')
 You can now convert files by calling `convert`:
 ```ruby
 # returns a URL where you can view the converted output in your web browser
-puts buildvu.convert('/path/to/input/file')
+puts buildvu.convert('/path/to/input/file') # File upload
+puts buildvu.convert('http://link.to/file.pdf', inputType: "download") # Send url pointing to file to server.
 
 # you can optionally specify a directory to download the converted output to
 buildvu.convert('/path/to/input/file', '/path/to/output/dir')

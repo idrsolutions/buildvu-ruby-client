@@ -46,11 +46,10 @@ class BuildVu
   # +output_file_path+:: string, (optional) the directory the output will be saved in, i.e 'path/to/output/dir'
   #
   # Returns: string, the URL where the HTML output can be previewed online
-  def convert(input_file_path, output_file_path = nil)
-    uuid = upload input_file_path
+  def convert(input_file_path, output_file_path: nil, inputType: 'upload')
+    uuid = upload input_file_path, inputType
 
     response = nil
-
     # check conversion status once every second until complete or error / timeout
     (0..@convert_timeout).each do |i|
       sleep 1
@@ -77,13 +76,24 @@ class BuildVu
   private
 
   # Upload file at given path to converter, return UUID if successful
-  def upload(input_file_path)
-    file = File.open(input_file_path, 'rb')
+  def upload(input_file_path, inputType)
+
+    params = {:input => inputType}
+
+    case inputType
+    when "upload"
+      file = File.open(input_file_path, 'rb')
+      params[:file] = file
+    when "download"
+      params[:url] = input_file_path
+    else
+      raise(raise('Unknown input type\n'))
+    end
 
     begin
-      r = RestClient.post(@endpoint, file: file)
-    rescue RestClient::ExceptionWithResponse => e
-      raise('Error uploading file:\n' + e.message)
+      r = RestClient.post(@endpoint, params)
+    rescue
+      raise(raise('Error sending url:\n' + e.message))
     end
 
     r.code == 200 ? uuid = JSON.parse(r.body)['uuid'] : raise('Error uploading file:\n Server returned response\n' +
