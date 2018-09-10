@@ -53,7 +53,7 @@ puts buildvu.convert('/path/to/input/file') # File upload
 puts buildvu.convert('http://link.to/file.pdf', inputType: "download") # Send url pointing to file to server.
 
 # you can optionally specify a directory to download the converted output to
-buildvu.convert('/path/to/input/file', '/path/to/output/dir')
+buildvu.convert('/path/to/input/file', output_file_path: '/path/to/output/dir')
 ```
 
 See `example_usage.rb` for examples.
