@@ -25,6 +25,10 @@ require 'rest-client'
 # Used to interact with IDRsolutions' BuildVu web service
 # For detailed usage instructions, see GitHub[https://github.com/idrsolutions/buildvu-ruby-client]
 class BuildVu
+
+  DOWNLOAD = 'download'
+  UPLOAD = 'upload'
+
   @base_endpoint = nil
   @endpoint = nil
   @convert_timeout = nil
@@ -46,8 +50,8 @@ class BuildVu
   # +output_file_path+:: string, (optional) the directory the output will be saved in, i.e 'path/to/output/dir'
   #
   # Returns: string, the URL where the HTML output can be previewed online
-  def convert(input_file_path, output_file_path: nil, inputType: 'upload')
-    uuid = upload input_file_path, inputType
+  def convert(input_file_path, output_file_path: nil, input_type: UPLOAD)
+    uuid = upload input_file_path, input_type
 
     response = nil
     # check conversion status once every second until complete or error / timeout
@@ -76,24 +80,23 @@ class BuildVu
   private
 
   # Upload file at given path to converter, return UUID if successful
-  def upload(input_file_path, inputType)
+  def upload(input_file_path, input_type)
+    params = {:input => input_type}
 
-    params = {:input => inputType}
-
-    case inputType
-    when "upload"
+    case input_type
+    when UPLOAD
       file = File.open(input_file_path, 'rb')
       params[:file] = file
-    when "download"
+    when DOWNLOAD
       params[:url] = input_file_path
     else
-      raise(raise('Unknown input type\n'))
+      raise('Unknown input type\n')
     end
 
     begin
       r = RestClient.post(@endpoint, params)
-    rescue
-      raise(raise('Error sending url:\n' + e.message))
+    rescue RestClient::ExceptionWithResponse => e
+      raise('Error sending url:\n' + e.to_s)
     end
 
     r.code == 200 ? uuid = JSON.parse(r.body)['uuid'] : raise('Error uploading file:\n Server returned response\n' +
