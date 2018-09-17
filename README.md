@@ -50,7 +50,7 @@ You can now convert files by calling `convert`:
 ```ruby
 # returns a URL where you can view the converted output in your web browser
 puts buildvu.convert('/path/to/input/file') # File upload
-puts buildvu.convert('http://link.to/file.pdf', inputType: "download") # Send url pointing to file to server.
+puts buildvu.convert('http://link.to/file.pdf', input_type: "download") # Send url pointing to file to server.
 
 # you can optionally specify a directory to download the converted output to
 buildvu.convert('/path/to/input/file', output_file_path: '/path/to/output/dir')
