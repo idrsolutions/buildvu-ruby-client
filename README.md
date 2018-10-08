@@ -1,8 +1,8 @@
 # BuildVu Ruby Client #
 
-BuildVu Ruby Client is the Ruby API for IDRSolution's [BuildVu Microservice Example](https://github.com/idrsolutions/buildvu-microservice-example).
+Convert PDF to HTML5 or SVG with Ruby using the BuildVu Ruby Client to interact with IDRsolutions' [BuildVu Microservice Example](https://github.com/idrsolutions/buildvu-microservice-example).
 
-It functions as an easy to use, plug and play library that lets you use [BuildVu](https://www.idrsolutions.com/buildvu/) from Ruby.
+The BuildVu Microservice Example is an open source project that allows you to convert PDF to HTML5 or SVG by running [BuildVu](https://www.idrsolutions.com/buildvu/) as a web service in the cloud or on-premise.
 
 -----
 
@@ -49,11 +49,13 @@ buildvu = BuildVu.new('localhost:8080/microservice-example')
 You can now convert files by calling `convert`:
 ```ruby
 # returns a URL where you can view the converted output in your web browser
-puts buildvu.convert('/path/to/input/file') # File upload
-puts buildvu.convert('http://link.to/file.pdf', input_type: "download") # Send url pointing to file to server.
+puts buildvu.convert('/path/to/input/file')
 
 # you can optionally specify a directory to download the converted output to
 buildvu.convert('/path/to/input/file', output_file_path: '/path/to/output/dir')
+
+# alternatively, you can specify a URL as input instead of uploading a file
+puts buildvu.convert('http://link.to/file.pdf', input_type: BuildVu::DOWNLOAD) 
 ```
 
 See `example_usage.rb` for examples.

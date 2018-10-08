@@ -5,14 +5,15 @@ require 'buildvu/version'
 Gem::Specification.new do |spec|
   spec.name          = 'buildvu'
   spec.version       = BuildVu::VERSION
-  spec.authors       = ['IDRsolutions']
+  spec.authors       = ['Rob Foley', 'IDRsolutions']
   spec.email         = ['support@idrsolutions.zendesk.com']
   spec.date          = Time.now.strftime('%Y-%m-%d')
 
   spec.summary       = 'Ruby API for IDRSolutions BuildVu Microservice'
-  spec.description   = "The BuildVu Ruby Client is the Ruby API for IDRsolutions' BuildVu Microservice Example, an open
-                        source project that allows you to convert PDF to HTML5 by running BuildVu as an online service.
-                        For documentation and usage examples, check out our GitHub page."
+  spec.description   = "Convert PDF to HTML5 or SVG with Ruby, using the BuildVu Ruby Client to interact with
+                        IDRsolutions' BuildVu Microservice Example. The BuildVu Microservice Example is an open source
+                        project that allows you to convert PDF to HTML5 or SVG by running BuildVu as a web service in
+                        the cloud or on-premise. For documentation and usage examples, check out our GitHub page. "
   spec.homepage      = 'https://github.com/idrsolutions/buildvu-ruby-client'
   spec.license       = 'Apache-2.0'
 
