@@ -48,10 +48,12 @@ class BuildVu
   # Params:
   # +input_file_path+:: string, the location of the PDF to convert, i.e 'path/to/input.pdf'
   # +output_file_path+:: string, (optional) the directory the output will be saved in, i.e 'path/to/output/dir'
+  # +callback_url+:: string, (optional) the url that a callback request is sent to when the conversion finishes.
+  # When this parameter is provided, polling behaviour is disabled and a uuid is returned instead of a URL
   #
   # Returns: string, the URL where the HTML output can be previewed online
-  def convert(input_file_path, output_file_path: nil, input_type: UPLOAD)
-    uuid = upload input_file_path, input_type
+  def convert(input_file_path, output_file_path: nil, input_type: UPLOAD, callback_url: nil)
+    uuid = upload input_file_path, input_type, callback_url
 
     response = nil
     # check conversion status once every second until complete or error / timeout
@@ -60,6 +62,11 @@ class BuildVu
       response = poll_status uuid
 
       break if response['state'] == 'processed'
+	  
+	  unless callback_url.nil?
+		response['previewUrl'] = uuid
+		break
+	  end
 
       raise('Server error getting conversion status, see server logs for details') if response['state'] == 'error'
 
@@ -80,8 +87,10 @@ class BuildVu
   private
 
   # Upload file at given path to converter, return UUID if successful
-  def upload(input_file_path, input_type)
+  def upload(input_file_path, input_type, callback_url)
     params = {:input => input_type}
+	
+	params[:callbackUrl] = callback_url unless callback_url.nil?
 
     case input_type
     when UPLOAD

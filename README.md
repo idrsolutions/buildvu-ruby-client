@@ -51,11 +51,14 @@ You can now convert files by calling `convert`:
 # returns a URL where you can view the converted output in your web browser
 puts buildvu.convert('/path/to/input/file')
 
+# alternatively, you can specify a URL as input instead of uploading a file
+puts buildvu.convert('http://link.to/file.pdf', input_type: BuildVu::DOWNLOAD)
+
 # you can optionally specify a directory to download the converted output to
 buildvu.convert('/path/to/input/file', output_file_path: '/path/to/output/dir')
 
-# alternatively, you can specify a URL as input instead of uploading a file
-puts buildvu.convert('http://link.to/file.pdf', input_type: BuildVu::DOWNLOAD) 
+# you can specify a URL that you want to be updated when the conversion finishes
+buildvu.convert('/path/to/input/file', callback_url: 'http://listener.url')
 ```
 
 See `example_usage.rb` for examples.
