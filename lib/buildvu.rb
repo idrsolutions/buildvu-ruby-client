@@ -32,6 +32,7 @@ class BuildVu
   @base_endpoint = nil
   @endpoint = nil
   @convert_timeout = nil
+  @file = nil
 
   # Constructor, setup the converter details
   # Params:
@@ -42,18 +43,23 @@ class BuildVu
     @endpoint = @base_endpoint + '/buildvu'
     @convert_timeout = conversion_timeout
   end
-
-  # Converts the given file and returns the URL where the output can be previewed online. If the output_file_path
-  # parameter is also passed in, a copy of the output will be downloaded to the specified location.
+  
+  # Loads the appropriate file to prepare for it to be uploaded. To be used with the UPLOAD input type.
   # Params:
-  # +input_file_path+:: string, the location of the PDF to convert, i.e 'path/to/input.pdf'
-  # +output_file_path+:: string, (optional) the directory the output will be saved in, i.e 'path/to/output/dir'
-  # +callback_url+:: string, (optional) the url that a callback request is sent to when the conversion finishes.
-  # When this parameter is provided, polling behaviour is disabled and a uuid is returned instead of a URL
+  # +input_file_path+:: string, Location of the PDF to convert, i.e 'path/to/input.pdf'
+  def prepare_file(input_file_path)
+    @file = File.open(input_file_path, 'rb')
+  end
+
+  # Converts the given file and returns a hash with the conversion results. If you wish to upload the file, then use 
+  # prepare_file() first. you can then use the values from the hash, or use methods like download_result().
+  # Params:
+  # +input+:: string, the method of inputting a file. Examples are BuildVu::UPLOAD or BuildVu::DOWNLOAD
+  # +url+:: string, (optional) the url for the server to download a PDF from
   #
-  # Returns: string, the URL where the HTML output can be previewed online
-  def convert(input_file_path, output_file_path: nil, input_type: UPLOAD, callback_url: nil)
-    uuid = upload input_file_path, input_type, callback_url
+  # Returns: hash [string: string], The results of the conversion
+  def convert(**params)
+    uuid = upload params
 
     response = nil
     # check conversion status once every second until complete or error / timeout
@@ -63,44 +69,41 @@ class BuildVu
 
       break if response['state'] == 'processed'
 	  
-	  unless callback_url.nil?
-		response['previewUrl'] = uuid
-		break
-	  end
+      break unless params['callbackUrl'].nil?
 
       raise('Server error getting conversion status, see server logs for details') if response['state'] == 'error'
 
       raise('Failed: File took longer than ' + @convert_timeout.to_s + ' seconds to convert') if i == @convert_timeout
     end
 
-    # download output
-    unless output_file_path.nil?
-      download_url = response['downloadUrl']
-      # get filename from input_file_path (downloaded file will be [filename].zip)
-      output_file_path += '/' + File.basename(input_file_path)[0..-4] + 'zip'
-      download(download_url, output_file_path)
-    end
+    reset_files
+    response
+  end
 
-    response['previewUrl']
+  # Downloads the zip file produced by the microservice. Provide '.' as the output_file_path if you wish to use the 
+  # current directory. Will use the filename of the zip on the server if none is specified.
+  # Params:
+  # +output_file_path+:: string, the output location to save the zip file
+  # +file_name+:: string, (optional) the custom name for the zip file. This should not include .zip
+  def download_result(results, output_file_path, file_name=nil)
+    download_url = results['downloadUrl']
+    
+    raise('Error: downloadUrl parameter is empty') if download_url.nil?
+    
+    if file_name.nil?
+      output_file_path += '/' + download_url.split('/').last
+    else
+      output_file_path += '/' + file_name + '.zip' 
+    end
+  
+    download download_url, output_file_path
   end
 
   private
 
   # Upload file at given path to converter, return UUID if successful
-  def upload(input_file_path, input_type, callback_url)
-    params = {:input => input_type}
-	
-	params[:callbackUrl] = callback_url unless callback_url.nil?
-
-    case input_type
-    when UPLOAD
-      file = File.open(input_file_path, 'rb')
-      params[:file] = file
-    when DOWNLOAD
-      params[:url] = input_file_path
-    else
-      raise('Unknown input type\n')
-    end
+  def upload(params)
+    params[:file] = @file
 
     begin
       r = RestClient.post(@endpoint, params)
@@ -109,7 +112,7 @@ class BuildVu
     end
 
     r.code == 200 ? uuid = JSON.parse(r.body)['uuid'] : raise('Error uploading file:\n Server returned response\n' +
-                                                                  r.code)
+                                                              r.code)
 
     uuid.nil? ? raise('Error uploading file:\nServer returned null UUID') : uuid
   end
@@ -123,7 +126,7 @@ class BuildVu
     end
 
     r.code == 200 ? response = JSON.parse(r.body) : raise('Error checking conversion status:\n Server returned ' +
-                                                              'response\n' + r.code)
+                                                          'response\n' + r.code)
 
     response
   end
@@ -140,5 +143,10 @@ class BuildVu
     end
   rescue RestClient::ExceptionWithResponse => e
     raise('Error downloading conversion output: ' + e.to_s)
+  end
+  
+  # Reset the files that have been prepared
+  def reset_files()
+    @file = nil
   end
 end
