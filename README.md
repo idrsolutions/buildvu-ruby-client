@@ -46,19 +46,31 @@ require 'buildvu'
 buildvu = BuildVu.new('localhost:8080/microservice-example')
 ```
 
-You can now convert files by calling `convert`:
+You can now convert files by calling the methods available. `convert()` will start the conversion process. If you want to upload a file via this client, then you must first call `prepare_file()`. For example to convert to html5:
 ```ruby
-# returns a URL where you can view the converted output in your web browser
-puts buildvu.convert('/path/to/input/file')
+# Prepare the local file for upload
+buildvu.prepare_file('path/to/file.pdf')
 
-# alternatively, you can specify a URL as input instead of uploading a file
-puts buildvu.convert('http://link.to/file.pdf', input_type: BuildVu::DOWNLOAD)
+# Convert the file with the input method specified
+results = buildvu.convert(input: BuildVu::UPLOAD)
 
-# you can optionally specify a directory to download the converted output to
-buildvu.convert('/path/to/input/file', output_file_path: '/path/to/output/dir')
+# Return a URL where you can view the converted output in your web browser
+puts results['previewUrl']
+```
+Alternatively, you can specify a url as the input source. This method does not require the prepare_file() method.
+```ruby
+# Convert the file with the input method specified
+results = buildvu.convert(input: BuildVu::UPLOAD, url: 'http://link.to/file.pdf')
 
-# you can specify a URL that you want to be updated when the conversion finishes
-buildvu.convert('/path/to/input/file', callback_url: 'http://listener.url')
+# Return a URL where you can view the converted output in your web browser
+puts results['previewUrl']
+```
+See additional parameters for `convert()` at our [API](https://github.com/idrsolutions/buildvu-microservice-example/blob/master/API.md).
+ 
+Once you have converted the file you can also specify a directory to download the converted output to:
+```ruby
+# Optionally specify a directory to download the converted output to
+buildvu.download_result(conversion_results, 'path/to/output/dir')
 ```
 
 See `example_usage.rb` for examples.
