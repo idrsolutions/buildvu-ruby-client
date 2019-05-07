@@ -32,7 +32,6 @@ class BuildVu
   @base_endpoint = nil
   @endpoint = nil
   @convert_timeout = nil
-  @file = nil
 
   # Constructor, setup the converter details
   # Params:
@@ -43,18 +42,12 @@ class BuildVu
     @endpoint = @base_endpoint + '/buildvu'
     @convert_timeout = conversion_timeout
   end
-  
-  # Loads the appropriate file to prepare for it to be uploaded. To be used with the UPLOAD input type.
-  # Params:
-  # +input_file_path+:: string, Location of the PDF to convert, i.e 'path/to/input.pdf'
-  def prepare_file(input_file_path)
-    @file = File.open(input_file_path, 'rb')
-  end
 
-  # Converts the given file and returns a hash with the conversion results. If you wish to upload the file, then use 
-  # prepare_file() first. you can then use the values from the hash, or use methods like download_result().
+  # Converts the given file and returns a hash with the conversion results. Requires the 'input' and either 'url' or 
+  # 'file' parameters to run. You can then use the values from the hash, or use methods like download_result().
   # Params:
   # +input+:: string, the method of inputting a file. Examples are BuildVu::UPLOAD or BuildVu::DOWNLOAD
+  # +url+:: string, (optional) Location of the PDF to convert, i.e 'path/to/input.pdf'
   # +url+:: string, (optional) the url for the server to download a PDF from
   #
   # Returns: hash [string: string], The results of the conversion
@@ -103,7 +96,9 @@ class BuildVu
 
   # Upload file at given path to converter, return UUID if successful
   def upload(params)
-    params[:file] = @file
+    
+    file_path = params.delete('file');
+    params[:file] = File.open(file_path, 'rb') if !file_path.nil?
 
     begin
       r = RestClient.post(@endpoint, params)
@@ -143,10 +138,5 @@ class BuildVu
     end
   rescue RestClient::ExceptionWithResponse => e
     raise('Error downloading conversion output: ' + e.to_s)
-  end
-  
-  # Reset the files that have been prepared
-  def reset_files()
-    @file = nil
   end
 end
