@@ -46,11 +46,8 @@ require 'buildvu'
 buildvu = BuildVu.new('localhost:8080/microservice-example')
 ```
 
-You can now convert files by calling the methods available. `convert()` will start the conversion process. If you want to upload a file via this client, then you must first call `prepare_file()`. For example to convert to html5:
+You can now convert files by calling the methods available. `convert()` will start the conversion process. For example to convert to html5:
 ```ruby
-# Prepare the local file for upload
-buildvu.prepare_file('path/to/file.pdf')
-
 # Convert the file with the input method specified
 results = buildvu.convert(input: BuildVu::UPLOAD)
 
