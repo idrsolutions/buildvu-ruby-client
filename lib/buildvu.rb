@@ -43,11 +43,11 @@ class BuildVu
     @convert_timeout = conversion_timeout
   end
 
-  # Converts the given file and returns a hash with the conversion results. Requires the 'input' and either 'url' or 
+  # Converts the given file and returns a hash collection with the conversion results. Requires the 'input' and either 'url' or 
   # 'file' parameters to run. You can then use the values from the hash, or use methods like download_result().
   # Params:
   # +input+:: string, the method of inputting a file. Examples are BuildVu::UPLOAD or BuildVu::DOWNLOAD
-  # +url+:: string, (optional) Location of the PDF to convert, i.e 'path/to/input.pdf'
+  # +file+:: string, (optional) Location of the PDF to convert, i.e 'path/to/input.pdf'
   # +url+:: string, (optional) the url for the server to download a PDF from
   #
   # Returns: hash [string: string], The results of the conversion

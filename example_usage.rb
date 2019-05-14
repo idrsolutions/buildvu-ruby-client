@@ -3,7 +3,7 @@ require 'buildvu'
 buildvu = BuildVu.new'localhost:8080/microservice-example'
 
 # Upload a local file to the BuildVu microservice
-# convert() returns a hash with the conversion results.
+# convert() returns a hash collection with the conversion results.
 conversion_results = buildvu.convert input: BuildVu::UPLOAD, file: 'path/to/file.pdf'
 
 # You can specify other parameters for the API as named parameters, for example
