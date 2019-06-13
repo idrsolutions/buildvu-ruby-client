@@ -49,12 +49,12 @@ buildvu = BuildVu.new('localhost:8080/microservice-example')
 You can now convert files by calling the methods available. `convert()` will start the conversion process. For example to convert to html5:
 ```ruby
 # Convert the file with the input method specified
-results = buildvu.convert(input: BuildVu::UPLOAD)
+results = buildvu.convert(input: BuildVu::UPLOAD, file: "path/to/file.pdf")
 
 # Return a URL where you can view the converted output in your web browser
 puts results['previewUrl']
 ```
-Alternatively, you can specify a url as the input source. This method does not require the prepare_file() method.
+Alternatively, you can specify a url as the input source.
 ```ruby
 # Convert the file with the input method specified
 results = buildvu.convert(input: BuildVu::UPLOAD, url: 'http://link.to/file.pdf')
