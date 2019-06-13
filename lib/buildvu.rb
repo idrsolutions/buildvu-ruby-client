@@ -62,14 +62,13 @@ class BuildVu
 
       break if response['state'] == 'processed'
 	  
-      break unless params['callbackUrl'].nil?
+      break unless params[:callbackUrl].nil?
 
       raise('Server error getting conversion status, see server logs for details') if response['state'] == 'error'
 
       raise('Failed: File took longer than ' + @convert_timeout.to_s + ' seconds to convert') if i == @convert_timeout
     end
 
-    reset_files
     response
   end
 
@@ -97,19 +96,19 @@ class BuildVu
   # Upload file at given path to converter, return UUID if successful
   def upload(params)
     
-    file_path = params.delete('file');
+    file_path = params.delete(:file);
     params[:file] = File.open(file_path, 'rb') if !file_path.nil?
 
     begin
       r = RestClient.post(@endpoint, params)
     rescue RestClient::ExceptionWithResponse => e
-      raise('Error sending url:\n' + e.to_s)
+      raise("Error sending url:\n" + e.to_s)
     end
 
-    r.code == 200 ? uuid = JSON.parse(r.body)['uuid'] : raise('Error uploading file:\n Server returned response\n' +
+    r.code == 200 ? uuid = JSON.parse(r.body)['uuid'] : raise("Error uploading file:\n Server returned response\n" +
                                                               r.code)
 
-    uuid.nil? ? raise('Error uploading file:\nServer returned null UUID') : uuid
+    uuid.nil? ? raise("Error uploading file:\nServer returned null UUID") : uuid
   end
 
   # Check conversion status
@@ -117,11 +116,11 @@ class BuildVu
     begin
       r = RestClient.get(@endpoint + '?uuid=' + uuid)
     rescue RestClient::ExceptionWithResponse => e
-      raise('Error checking conversion status:\n' + e.to_s)
+      raise("Error checking conversion status:\n" + e.to_s)
     end
 
-    r.code == 200 ? response = JSON.parse(r.body) : raise('Error checking conversion status:\n Server returned ' +
-                                                          'response\n' + r.code)
+    r.code == 200 ? response = JSON.parse(r.body) : raise("Error checking conversion status:\n Server returned " +
+                                                          "response\n" + r.code)
 
     response
   end
