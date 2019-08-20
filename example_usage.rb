@@ -15,7 +15,7 @@ conversion_results = buildvu.convert input: BuildVu::UPLOAD, file: 'path/to/file
 # Alternatively, you can specify a url from which the server will download the file to convert.
 #conversion_results = buildvu.convert url: 'http://link.to/filename', input: BuildVu::DOWNLOAD
 
-output_url = conversion_results['previewUrl']
+output_url = conversion_results['downloadUrl']
 
 # After the conversion you can also specify a directory to download the output to:
 #buildvu.download_result conversion_results, 'path/to/output/dir'

@@ -51,16 +51,16 @@ You can now convert files by calling the methods available. `convert()` will sta
 # Convert the file with the input method specified
 results = buildvu.convert(input: BuildVu::UPLOAD, file: "path/to/file.pdf")
 
-# Return a URL where you can view the converted output in your web browser
-puts results['previewUrl']
+# Return a URL where you can download the converted output
+puts results['downloadUrl']
 ```
 Alternatively, you can specify a url as the input source.
 ```ruby
 # Convert the file with the input method specified
 results = buildvu.convert(input: BuildVu::UPLOAD, url: 'http://link.to/file.pdf')
 
-# Return a URL where you can view the converted output in your web browser
-puts results['previewUrl']
+# Return a URL where you can download the converted output
+puts results['downloadUrl']
 ```
 See additional parameters for `convert()` at our [API](https://github.com/idrsolutions/buildvu-microservice-example/blob/master/API.md).
  
