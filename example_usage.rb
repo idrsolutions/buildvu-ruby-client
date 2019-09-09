@@ -1,6 +1,6 @@
 require 'buildvu'
 
-buildvu = BuildVu.new'localhost:8080/microservice-example'
+buildvu = BuildVu.new'localhost:8080/buildvu-microservice'
 
 # Upload a local file to the BuildVu microservice
 # convert() returns a hash collection with the conversion results.
