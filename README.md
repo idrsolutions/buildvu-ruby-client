@@ -43,7 +43,7 @@ You can then install it using:
 Setup the converter details by creating a new `BuildVu` object:
 ```ruby
 require 'buildvu'
-buildvu = BuildVu.new('localhost:8080/microservice-example')
+buildvu = BuildVu.new('localhost:8080/buildvu-microservice')
 ```
 
 You can now convert files by calling the methods available. `convert()` will start the conversion process. For example to convert to html5:
