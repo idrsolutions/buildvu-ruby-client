@@ -4,7 +4,7 @@ Convert PDF to HTML5 or SVG with Ruby using the BuildVu Ruby Client to interact 
 
 The BuildVu Microservice Example is an open source project that allows you to convert PDF to HTML5 or SVG by running [BuildVu](https://www.idrsolutions.com/buildvu/) as a web service in the cloud or on-premise.
 
-IDR Solutions offer a free trial service for running BuildVu with Ruby, more infomation on this can be found [here]. (https://www.idrsolutions.com/buildvu/convert-pdf-in-ruby/)
+IDRsolutions offer a free trial service for running BuildVu with Ruby, more infomation on this can be found [here](https://www.idrsolutions.com/buildvu/convert-pdf-in-ruby/).
 
 -----
 
