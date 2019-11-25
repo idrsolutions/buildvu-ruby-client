@@ -63,7 +63,7 @@ class BuildVu
       response = poll_status uuid
 
       break if response['state'] == 'processed'
-	  
+      
       break unless params[:callbackUrl].nil?
 
       raise('Server error getting conversion status, see server logs for details') if response['state'] == 'error'
@@ -102,21 +102,21 @@ class BuildVu
     params[:file] = Faraday::UploadIO.new(file_path, 'application/pdf') if !file_path.nil?
 
     uri = URI(@endpoint)
-	host = uri.scheme + "://" + uri.host + ':' + uri.port.to_s;
-	
-	begin	
-	  conn = Faraday.new(host) do |f|
+    host = uri.scheme + "://" + uri.host + ':' + uri.port.to_s;
+    
+    begin
+      conn = Faraday.new(host) do |f|
         f.request :multipart
         f.request :url_encoded
         f.adapter Faraday.default_adapter
       end
 
-	  r = conn.post(uri.path, params)
-		
-	rescue StandardError => e
+      r = conn.post(uri.path, params)
+    
+    rescue StandardError => e
       raise("Error sending url:\n" + e.to_s)
     end
-	
+    
     r.status == 200 ? uuid = JSON.parse(r.body)['uuid'] : raise("Error uploading file:\n Server returned response\n" + r.status.to_s + " - " + JSON.parse(r.body)['error'])
 
     uuid.nil? ? raise("Error uploading file:\nServer returned null UUID") : uuid
@@ -131,9 +131,9 @@ class BuildVu
       conn = Faraday.new(host) do |req|
           req.params['uuid'] = uuid
           req.request :url_encoded
-		  req.adapter Faraday.default_adapter
-	  end
-	  r = conn.get(uri.path)
+          req.adapter Faraday.default_adapter
+      end
+      r = conn.get(uri.path)
     rescue StandardError => e
       raise("Error checking conversion status:\n" + e.to_s)
     end
