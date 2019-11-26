@@ -21,7 +21,6 @@
 
 require 'json'
 require 'Faraday'
-require 'rest-client'
 
 
 # Used to interact with IDRsolutions' BuildVu web service
@@ -145,14 +144,9 @@ class BuildVu
 
   # Download converted output to the given location
   def download(download_url, output_file_path)
-    File.open(output_file_path, 'wb') do |output_file|
-      block = lambda { |r|
-        r.read_body do |data|
-          output_file.write data
-        end
-      }
-      RestClient::Request.new(method: :get, url: download_url, block_response: block).execute
-    end
+    response = Faraday.get(download_url)
+    File.open(output_file_path, 'wb') { |fp| fp.write(response.body) }
+
   rescue StandardError => e
     raise('Error downloading conversion output: ' + e.to_s)
   end
