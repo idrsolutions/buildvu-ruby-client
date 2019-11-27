@@ -150,7 +150,11 @@ class BuildVu
 
   # Download converted output to the given location
   def download(download_url, output_file_path)
-    response = Faraday.get(download_url)
+    conn = Faraday.new download_url do |req|
+      req.adapter Faraday.default_adapter
+      req.basic_auth @auth[:login], @auth[:pass] unless @auth.nil?
+    end
+    response = conn.get(download_url)
     File.open(output_file_path, 'wb') { |fp| fp.write(response.body) }
 
   rescue StandardError => e
