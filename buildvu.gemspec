@@ -9,8 +9,10 @@ Gem::Specification.new do |spec|
   spec.email         = ['support@idrsolutions.zendesk.com']
   spec.date          = Time.now.strftime('%Y-%m-%d')
 
-  spec.summary       = 'Ruby API for IDRSolutions BuildVu Microservice'
-  spec.description   = "Convert PDF to HTML5 or SVG with Ruby, using the BuildVu Ruby Client to interact with
+  spec.summary       = '[DEPRECATED] Ruby API for IDRSolutions BuildVu Microservice'
+  spec.description   = "Future development has been directed to idrsolutions-ruby-client, which can be used for the same purpose. 
+                        This package will receive no more updates. 
+                        Convert PDF to HTML5 or SVG with Ruby, using the BuildVu Ruby Client to interact with
                         IDRsolutions' BuildVu Microservice Example. The BuildVu Microservice Example is an open source
                         project that allows you to convert PDF to HTML5 or SVG by running BuildVu as a web service in
                         the cloud or on-premise. For documentation and usage examples, check out our GitHub page. "
